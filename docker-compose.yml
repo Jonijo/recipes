@@ -1,0 +1,21 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: recipes-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-recipes}
+      POSTGRES_USER: ${POSTGRES_USER:-recipes}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-recipes}
+    ports:
+      - "5432:5432"
+    volumes:
+      - recipes-pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-recipes} -d ${POSTGRES_DB:-recipes}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  recipes-pgdata:
