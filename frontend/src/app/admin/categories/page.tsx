@@ -31,63 +31,65 @@ export default function AdminCategoriesPage() {
   }
 
   return (
-    <main className="mx-auto max-w-6xl px-6 py-10">
+    <main className="mx-auto max-w-6xl px-6 pb-20 pt-12">
       <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold tracking-tight">Categories</h1>
+        <h1 className="font-display text-5xl font-semibold leading-[1.02] tracking-tight text-ink">
+          Categories
+        </h1>
         <Link
           href="/admin/categories/new"
-          className="rounded-md bg-stone-900 px-4 py-2 text-sm font-medium text-white hover:bg-stone-700"
+          className="rounded-full bg-ink px-5 py-2.5 text-sm font-medium text-paper transition hover:bg-terracotta"
         >
           New category
         </Link>
       </div>
 
-      <div className="mt-8 overflow-hidden rounded-lg border border-stone-200 bg-white">
+      <div className="mt-10 overflow-hidden rounded-3xl border border-ink/10 bg-paper">
         <table className="w-full text-left text-sm">
-          <thead className="border-b border-stone-200 bg-stone-50 text-xs uppercase tracking-wide text-stone-500">
+          <thead className="border-b border-ink/10 bg-cream/60 text-[11px] uppercase tracking-widest-er text-ink-2">
             <tr>
-              <th className="px-4 py-3">Name</th>
-              <th className="px-4 py-3">Slug</th>
-              <th className="px-4 py-3 text-right">Actions</th>
+              <th className="px-5 py-4">Name</th>
+              <th className="px-5 py-4">Slug</th>
+              <th className="px-5 py-4 text-right">Actions</th>
             </tr>
           </thead>
           <tbody>
             {loading && (
               <tr>
-                <td colSpan={3} className="px-4 py-6 text-center text-stone-500">
+                <td colSpan={3} className="px-5 py-8 text-center text-ink-2">
                   Loading…
                 </td>
               </tr>
             )}
             {!loading && error && (
               <tr>
-                <td colSpan={3} className="px-4 py-6 text-center text-red-600">
+                <td colSpan={3} className="px-5 py-8 text-center text-terracotta">
                   {error}
                 </td>
               </tr>
             )}
             {!loading && !error && categories.length === 0 && (
               <tr>
-                <td colSpan={3} className="px-4 py-6 text-center text-stone-500">
+                <td colSpan={3} className="px-5 py-8 text-center text-ink-2">
                   No categories yet.
                 </td>
               </tr>
             )}
             {categories.map((c) => (
-              <tr key={c.id} className="border-b border-stone-100 last:border-0">
-                <td className="px-4 py-3 font-medium">{c.name}</td>
-                <td className="px-4 py-3 text-stone-500">{c.slug}</td>
-                <td className="px-4 py-3 text-right">
+              <tr key={c.id} className="border-b border-ink/5 last:border-0">
+                <td className="px-5 py-4 font-medium text-ink">{c.name}</td>
+                <td className="px-5 py-4 font-mono text-xs text-ink-2">{c.slug}</td>
+                <td className="px-5 py-4 text-right">
                   <Link
                     href={`/admin/categories/${c.id}/edit`}
-                    className="text-stone-700 hover:underline"
+                    className="text-ink transition hover:text-terracotta"
                   >
                     Edit
                   </Link>
-                  <span className="mx-2 text-stone-300">|</span>
+                  <span className="mx-3 text-ink/20">|</span>
                   <button
                     onClick={() => onDelete(c.id, c.name)}
-                    className="text-red-600 hover:underline"
+                    className="text-terracotta transition hover:underline"
                   >
                     Delete
                   </button>

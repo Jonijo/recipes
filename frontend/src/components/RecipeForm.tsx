@@ -81,15 +81,9 @@ export function RecipeForm({ initial }: Props) {
     }
   }
 
-  const inputCls =
-    "rounded-md border border-stone-300 bg-white px-3 py-2 focus:border-stone-500 focus:outline-none";
-
   return (
-    <form onSubmit={onSubmit} className="mt-8 max-w-3xl space-y-6">
-      <div className="flex flex-col gap-1 text-sm">
-        <label htmlFor="title" className="font-medium">
-          Title
-        </label>
+    <form onSubmit={onSubmit} className="mt-10 max-w-3xl space-y-6 rounded-3xl border border-ink/10 bg-paper p-8">
+      <Field label="Title" htmlFor="title">
         <input
           id="title"
           value={title}
@@ -98,12 +92,9 @@ export function RecipeForm({ initial }: Props) {
           maxLength={255}
           className={inputCls}
         />
-      </div>
+      </Field>
 
-      <div className="flex flex-col gap-1 text-sm">
-        <label htmlFor="shortDescription" className="font-medium">
-          Short description
-        </label>
+      <Field label="Short description" htmlFor="shortDescription">
         <input
           id="shortDescription"
           value={shortDescription ?? ""}
@@ -111,13 +102,10 @@ export function RecipeForm({ initial }: Props) {
           maxLength={500}
           className={inputCls}
         />
-      </div>
+      </Field>
 
-      <div className="grid gap-4 sm:grid-cols-2">
-        <div className="flex flex-col gap-1 text-sm">
-          <label htmlFor="category" className="font-medium">
-            Category
-          </label>
+      <div className="grid gap-5 sm:grid-cols-2">
+        <Field label="Category" htmlFor="category">
           <select
             id="category"
             value={categoryId}
@@ -135,14 +123,11 @@ export function RecipeForm({ initial }: Props) {
             ))}
           </select>
           {categoriesError && (
-            <p className="text-xs text-red-600">{categoriesError}</p>
+            <p className="text-xs text-terracotta">{categoriesError}</p>
           )}
-        </div>
+        </Field>
 
-        <div className="flex flex-col gap-1 text-sm">
-          <label htmlFor="accessType" className="font-medium">
-            Access
-          </label>
+        <Field label="Access" htmlFor="accessType">
           <select
             id="accessType"
             value={accessType}
@@ -152,14 +137,11 @@ export function RecipeForm({ initial }: Props) {
             <option value="FREE">Free</option>
             <option value="PREMIUM">Premium</option>
           </select>
-        </div>
+        </Field>
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-4">
-        <div className="flex flex-col gap-1 text-sm">
-          <label htmlFor="prepTime" className="font-medium">
-            Prep (min)
-          </label>
+      <div className="grid gap-5 sm:grid-cols-4">
+        <Field label="Prep (min)" htmlFor="prepTime">
           <input
             id="prepTime"
             type="number"
@@ -168,11 +150,8 @@ export function RecipeForm({ initial }: Props) {
             onChange={(e) => setPrepTime(e.target.value)}
             className={inputCls}
           />
-        </div>
-        <div className="flex flex-col gap-1 text-sm">
-          <label htmlFor="cookTime" className="font-medium">
-            Cook (min)
-          </label>
+        </Field>
+        <Field label="Cook (min)" htmlFor="cookTime">
           <input
             id="cookTime"
             type="number"
@@ -181,11 +160,8 @@ export function RecipeForm({ initial }: Props) {
             onChange={(e) => setCookTime(e.target.value)}
             className={inputCls}
           />
-        </div>
-        <div className="flex flex-col gap-1 text-sm">
-          <label htmlFor="servings" className="font-medium">
-            Servings
-          </label>
+        </Field>
+        <Field label="Servings" htmlFor="servings">
           <input
             id="servings"
             type="number"
@@ -194,11 +170,8 @@ export function RecipeForm({ initial }: Props) {
             onChange={(e) => setServings(e.target.value)}
             className={inputCls}
           />
-        </div>
-        <div className="flex flex-col gap-1 text-sm">
-          <label htmlFor="difficulty" className="font-medium">
-            Difficulty
-          </label>
+        </Field>
+        <Field label="Difficulty" htmlFor="difficulty">
           <select
             id="difficulty"
             value={difficulty ?? ""}
@@ -210,13 +183,10 @@ export function RecipeForm({ initial }: Props) {
             <option value="MEDIUM">Medium</option>
             <option value="HARD">Hard</option>
           </select>
-        </div>
+        </Field>
       </div>
 
-      <div className="flex flex-col gap-1 text-sm">
-        <label htmlFor="description" className="font-medium">
-          Description
-        </label>
+      <Field label="Description" htmlFor="description">
         <textarea
           id="description"
           value={description ?? ""}
@@ -224,67 +194,85 @@ export function RecipeForm({ initial }: Props) {
           rows={4}
           className={inputCls}
         />
-      </div>
+      </Field>
 
-      <div className="flex flex-col gap-1 text-sm">
-        <label htmlFor="ingredients" className="font-medium">
-          Ingredients (one per line)
-        </label>
+      <Field label="Ingredients (one per line)" htmlFor="ingredients">
         <textarea
           id="ingredients"
           value={ingredientsText ?? ""}
           onChange={(e) => setIngredientsText(e.target.value)}
           rows={6}
-          className={`font-mono text-xs ${inputCls}`}
+          className={`${inputCls} font-mono text-sm`}
         />
-      </div>
+      </Field>
 
-      <div className="flex flex-col gap-1 text-sm">
-        <label htmlFor="steps" className="font-medium">
-          Steps (one per line)
-        </label>
+      <Field label="Steps (one per line)" htmlFor="steps">
         <textarea
           id="steps"
           value={stepsText ?? ""}
           onChange={(e) => setStepsText(e.target.value)}
           rows={8}
-          className={`font-mono text-xs ${inputCls}`}
+          className={`${inputCls} font-mono text-sm`}
         />
-      </div>
+      </Field>
 
       <div>
-        <p className="mb-2 text-sm font-medium">Image</p>
+        <p className="mb-2 text-[11px] font-semibold uppercase tracking-widest-er text-ink-2">
+          Image
+        </p>
         <ImageUploader value={imageUrl} onChange={setImageUrl} />
       </div>
 
-      <label className="flex items-center gap-2 text-sm">
+      <label className="flex items-center gap-3 text-sm text-ink">
         <input
           type="checkbox"
           checked={featured}
           onChange={(e) => setFeatured(e.target.checked)}
-          className="h-4 w-4 rounded border-stone-300"
+          className="h-4 w-4 rounded border-ink/30 accent-terracotta"
         />
         Featured on homepage
       </label>
 
-      {error && <p className="text-sm text-red-600">{error}</p>}
+      {error && <p className="text-sm text-terracotta">{error}</p>}
 
-      <div className="flex gap-3">
+      <div className="flex gap-3 pt-2">
         <button
           type="submit"
           disabled={submitting}
-          className="rounded-md bg-stone-900 px-4 py-2 text-sm font-medium text-white hover:bg-stone-700 disabled:opacity-50"
+          className="rounded-full bg-ink px-5 py-2.5 text-sm font-medium text-paper transition hover:bg-terracotta disabled:opacity-50"
         >
           {submitting ? "Saving…" : initial ? "Save changes" : "Create recipe"}
         </button>
         <button
           type="button"
           onClick={() => router.push("/admin/recipes")}
-          className="rounded-md border border-stone-300 bg-white px-4 py-2 text-sm hover:bg-stone-100"
+          className="rounded-full border border-ink/15 bg-paper px-5 py-2.5 text-sm text-ink transition hover:border-terracotta hover:text-terracotta"
         >
           Cancel
         </button>
       </div>
     </form>
+  );
+}
+
+const inputCls =
+  "w-full rounded-2xl border border-ink/15 bg-paper px-4 py-3 text-base text-ink transition placeholder:text-ink-2/50 focus:border-terracotta focus:outline-none";
+
+function Field({
+  label,
+  htmlFor,
+  children,
+}: {
+  label: string;
+  htmlFor: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <label htmlFor={htmlFor} className="flex flex-col gap-1.5 text-sm">
+      <span className="text-[11px] font-semibold uppercase tracking-widest-er text-ink-2">
+        {label}
+      </span>
+      {children}
+    </label>
   );
 }

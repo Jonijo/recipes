@@ -34,57 +34,75 @@ export function CategoryForm({ initial }: { initial?: Category }) {
   }
 
   return (
-    <form onSubmit={onSubmit} className="mt-8 max-w-xl space-y-6">
-      <div className="flex flex-col gap-1 text-sm">
-        <label htmlFor="name" className="font-medium">
-          Name
-        </label>
+    <form onSubmit={onSubmit} className="mt-10 max-w-xl space-y-6 rounded-3xl border border-ink/10 bg-paper p-8">
+      <Field label="Name" htmlFor="name">
         <input
           id="name"
           value={name}
           onChange={(e) => setName(e.target.value)}
           required
           maxLength={255}
-          className="rounded-md border border-stone-300 bg-white px-3 py-2 focus:border-stone-500 focus:outline-none"
+          className={inputCls}
         />
-      </div>
+      </Field>
 
-      <div className="flex flex-col gap-1 text-sm">
-        <label htmlFor="description" className="font-medium">
-          Description
-        </label>
+      <Field label="Description" htmlFor="description">
         <textarea
           id="description"
           value={description ?? ""}
           onChange={(e) => setDescription(e.target.value)}
           rows={4}
-          className="rounded-md border border-stone-300 bg-white px-3 py-2 focus:border-stone-500 focus:outline-none"
+          className={inputCls}
         />
-      </div>
+      </Field>
 
       <div>
-        <p className="mb-2 text-sm font-medium">Image</p>
+        <p className="mb-2 text-[11px] font-semibold uppercase tracking-widest-er text-ink-2">
+          Image
+        </p>
         <ImageUploader value={imageUrl} onChange={setImageUrl} />
       </div>
 
-      {error && <p className="text-sm text-red-600">{error}</p>}
+      {error && <p className="text-sm text-terracotta">{error}</p>}
 
-      <div className="flex gap-3">
+      <div className="flex gap-3 pt-2">
         <button
           type="submit"
           disabled={submitting}
-          className="rounded-md bg-stone-900 px-4 py-2 text-sm font-medium text-white hover:bg-stone-700 disabled:opacity-50"
+          className="rounded-full bg-ink px-5 py-2.5 text-sm font-medium text-paper transition hover:bg-terracotta disabled:opacity-50"
         >
           {submitting ? "Saving…" : initial ? "Save changes" : "Create category"}
         </button>
         <button
           type="button"
           onClick={() => router.push("/admin/categories")}
-          className="rounded-md border border-stone-300 bg-white px-4 py-2 text-sm hover:bg-stone-100"
+          className="rounded-full border border-ink/15 bg-paper px-5 py-2.5 text-sm text-ink transition hover:border-terracotta hover:text-terracotta"
         >
           Cancel
         </button>
       </div>
     </form>
+  );
+}
+
+const inputCls =
+  "w-full rounded-2xl border border-ink/15 bg-paper px-4 py-3 text-base text-ink transition placeholder:text-ink-2/50 focus:border-terracotta focus:outline-none";
+
+function Field({
+  label,
+  htmlFor,
+  children,
+}: {
+  label: string;
+  htmlFor: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <label htmlFor={htmlFor} className="flex flex-col gap-1.5 text-sm">
+      <span className="text-[11px] font-semibold uppercase tracking-widest-er text-ink-2">
+        {label}
+      </span>
+      {children}
+    </label>
   );
 }

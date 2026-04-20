@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
 import { ApiError, authApi } from "@/lib/api";
 import { saveToken } from "@/lib/auth";
+import { Eyebrow } from "@/components/Eyebrow";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -29,46 +30,71 @@ export default function LoginPage() {
   }
 
   return (
-    <main className="mx-auto flex min-h-screen max-w-md flex-col justify-center px-6 py-12">
-      <h1 className="text-2xl font-bold">Log in</h1>
-      <form onSubmit={onSubmit} className="mt-6 flex flex-col gap-4">
-        <label className="flex flex-col gap-1 text-sm">
-          <span className="font-medium">Email</span>
-          <input
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            type="email"
-            autoComplete="email"
-            required
-            className="rounded-md border border-stone-300 bg-white px-3 py-2 text-sm focus:border-stone-500 focus:outline-none"
-          />
-        </label>
-        <label className="flex flex-col gap-1 text-sm">
-          <span className="font-medium">Password</span>
-          <input
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            type="password"
-            autoComplete="current-password"
-            required
-            className="rounded-md border border-stone-300 bg-white px-3 py-2 text-sm focus:border-stone-500 focus:outline-none"
-          />
-        </label>
-        {error && <p className="text-sm text-red-600">{error}</p>}
+    <main className="mx-auto flex min-h-[calc(100vh-120px)] max-w-md flex-col justify-center px-6 py-12">
+      <Eyebrow>Welcome back</Eyebrow>
+      <h1 className="mt-3 font-display text-5xl font-semibold leading-[1.02] tracking-tight text-ink">
+        Log <span className="italic text-terracotta">in</span>.
+      </h1>
+      <form onSubmit={onSubmit} className="mt-8 flex flex-col gap-5">
+        <TextField
+          label="Email"
+          type="email"
+          autoComplete="email"
+          required
+          value={email}
+          onChange={setEmail}
+        />
+        <TextField
+          label="Password"
+          type="password"
+          autoComplete="current-password"
+          required
+          value={password}
+          onChange={setPassword}
+        />
+        {error && <p className="text-sm text-terracotta">{error}</p>}
         <button
           type="submit"
           disabled={submitting}
-          className="rounded-md bg-stone-900 px-4 py-2 text-sm font-medium text-white hover:bg-stone-700 disabled:opacity-50"
+          className="mt-2 rounded-full bg-ink px-5 py-3 text-sm font-medium text-paper transition hover:bg-terracotta disabled:opacity-50"
         >
           {submitting ? "Logging in…" : "Log in"}
         </button>
       </form>
-      <p className="mt-4 text-sm text-stone-600">
-        No account?{" "}
-        <Link href="/register" className="underline">
+      <p className="mt-6 text-sm text-ink-2">
+        No account yet?{" "}
+        <Link
+          href="/register"
+          className="font-medium text-terracotta underline-offset-4 hover:underline"
+        >
           Register
         </Link>
       </p>
     </main>
+  );
+}
+
+function TextField({
+  label,
+  value,
+  onChange,
+  ...rest
+}: {
+  label: string;
+  value: string;
+  onChange: (v: string) => void;
+} & Omit<React.InputHTMLAttributes<HTMLInputElement>, "onChange" | "value">) {
+  return (
+    <label className="flex flex-col gap-1.5 text-sm">
+      <span className="text-[11px] font-semibold uppercase tracking-widest-er text-ink-2">
+        {label}
+      </span>
+      <input
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        className="rounded-2xl border border-ink/15 bg-paper px-4 py-3 text-base text-ink transition placeholder:text-ink-2/50 focus:border-terracotta focus:outline-none"
+        {...rest}
+      />
+    </label>
   );
 }

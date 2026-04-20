@@ -4,6 +4,8 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { ApiError, authApi } from "@/lib/api";
 import { clearToken, User } from "@/lib/auth";
+import { Eyebrow } from "@/components/Eyebrow";
+import { Badge } from "@/components/Badge";
 
 export default function AccountPage() {
   const router = useRouter();
@@ -30,28 +32,54 @@ export default function AccountPage() {
   }
 
   if (loading) {
-    return <p className="p-8 text-sm text-stone-500">Loading…</p>;
+    return <p className="p-8 text-sm text-ink-2">Loading…</p>;
   }
 
   if (!user) return null;
 
   return (
-    <main className="mx-auto max-w-2xl px-6 py-12">
-      <h1 className="text-2xl font-bold">Your account</h1>
-      <dl className="mt-6 grid grid-cols-[auto_1fr] gap-x-6 gap-y-2 text-sm">
-        <dt className="font-medium text-stone-500">Name</dt>
-        <dd>{user.name}</dd>
-        <dt className="font-medium text-stone-500">Email</dt>
-        <dd>{user.email}</dd>
-        <dt className="font-medium text-stone-500">Role</dt>
-        <dd>{user.role}</dd>
-      </dl>
+    <main className="mx-auto max-w-2xl px-6 pb-20 pt-16">
+      <Eyebrow>Your account</Eyebrow>
+      <h1 className="mt-3 font-display text-5xl font-semibold leading-[1.02] tracking-tight text-ink">
+        Hello, <span className="italic text-terracotta">{user.name.split(" ")[0]}</span>.
+      </h1>
+
+      <div className="mt-12 rounded-3xl border border-ink/10 bg-paper p-8">
+        <dl className="grid grid-cols-1 gap-y-6 sm:grid-cols-[auto_1fr] sm:gap-x-10">
+          <Row label="Name" value={user.name} />
+          <Row label="Email" value={user.email} />
+          <div className="contents">
+            <dt className="text-[11px] font-semibold uppercase tracking-widest-er text-ink-2 sm:pt-1">
+              Role
+            </dt>
+            <dd>
+              {user.role === "ADMIN" ? (
+                <Badge variant="premium">Admin</Badge>
+              ) : (
+                <Badge variant="neutral">Member</Badge>
+              )}
+            </dd>
+          </div>
+        </dl>
+      </div>
+
       <button
         onClick={logout}
-        className="mt-8 rounded-md border border-stone-300 bg-white px-4 py-2 text-sm font-medium hover:bg-stone-100"
+        className="mt-8 rounded-full border border-ink/15 bg-paper px-5 py-2.5 text-sm font-medium text-ink transition hover:border-terracotta hover:text-terracotta"
       >
         Log out
       </button>
     </main>
+  );
+}
+
+function Row({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="contents">
+      <dt className="text-[11px] font-semibold uppercase tracking-widest-er text-ink-2 sm:pt-1">
+        {label}
+      </dt>
+      <dd className="font-display text-xl text-ink">{value}</dd>
+    </div>
   );
 }

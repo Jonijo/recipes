@@ -11,6 +11,7 @@ export function Nav() {
   const pathname = usePathname();
   const [user, setUser] = useState<User | null>(null);
   const [checked, setChecked] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
     if (!getToken()) {
@@ -26,6 +27,13 @@ export function Nav() {
       .finally(() => setChecked(true));
   }, [pathname]);
 
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 8);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   function logout() {
     clearToken();
     setUser(null);
@@ -33,38 +41,49 @@ export function Nav() {
   }
 
   return (
-    <header className="border-b border-stone-200 bg-white/90 backdrop-blur">
-      <nav className="mx-auto flex max-w-6xl items-center justify-between px-6 py-3">
-        <Link href="/" className="text-lg font-bold tracking-tight">
-          Recipes
+    <header
+      className={`sticky top-0 z-40 bg-paper transition-shadow ${
+        scrolled ? "border-b border-ink/10 shadow-[0_1px_0_rgba(28,20,16,0.04)]" : ""
+      }`}
+    >
+      <nav className="mx-auto flex max-w-6xl items-center justify-between px-6 py-5">
+        <Link
+          href="/"
+          className="flex items-baseline gap-2 font-display text-[22px] font-semibold leading-none tracking-tight text-ink"
+        >
+          <span className="italic">Recipes</span>
+          <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-terracotta" />
         </Link>
-        <div className="flex items-center gap-5 text-sm">
-          <Link href="/recipes" className="hover:underline">
+        <div className="flex items-center gap-7 text-sm">
+          <NavLink href="/recipes" active={pathname?.startsWith("/recipes")}>
             Browse
-          </Link>
+          </NavLink>
           {checked && user?.role === "ADMIN" && (
-            <Link href="/admin" className="hover:underline">
+            <NavLink href="/admin" active={pathname?.startsWith("/admin")}>
               Admin
-            </Link>
+            </NavLink>
           )}
           {checked && user && (
             <>
-              <Link href="/account" className="hover:underline">
+              <NavLink href="/account" active={pathname === "/account"}>
                 Account
-              </Link>
-              <button onClick={logout} className="text-stone-600 hover:underline">
+              </NavLink>
+              <button
+                onClick={logout}
+                className="text-ink-2 transition hover:text-ink"
+              >
                 Log out
               </button>
             </>
           )}
           {checked && !user && (
             <>
-              <Link href="/login" className="hover:underline">
+              <NavLink href="/login" active={pathname === "/login"}>
                 Log in
-              </Link>
+              </NavLink>
               <Link
                 href="/register"
-                className="rounded-md bg-stone-900 px-3 py-1.5 text-white hover:bg-stone-700"
+                className="rounded-full bg-ink px-4 py-2 text-[13px] font-medium text-paper transition hover:bg-terracotta"
               >
                 Register
               </Link>
@@ -73,5 +92,32 @@ export function Nav() {
         </div>
       </nav>
     </header>
+  );
+}
+
+function NavLink({
+  href,
+  active,
+  children,
+}: {
+  href: string;
+  active?: boolean;
+  children: React.ReactNode;
+}) {
+  return (
+    <Link
+      href={href}
+      className={`relative text-[13px] font-medium transition ${
+        active ? "text-ink" : "text-ink-2 hover:text-ink"
+      }`}
+    >
+      {children}
+      {active && (
+        <span
+          aria-hidden
+          className="absolute -bottom-1.5 left-1/2 h-0.5 w-6 -translate-x-1/2 rounded-full bg-terracotta"
+        />
+      )}
+    </Link>
   );
 }
