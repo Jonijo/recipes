@@ -5,6 +5,7 @@ Thumbs.db
 .vscode/
 *.iml
 *.swp
+.claude/
 
 # Env
 .env
@@ -18,6 +19,8 @@ backend/target/
 backend/.mvn/wrapper/maven-wrapper.jar
 backend/**/*.class
 backend/HELP.md
+backend/uploads/
+uploads/
 
 # Node / Next
 frontend/node_modules/
